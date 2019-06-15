@@ -14,7 +14,7 @@ class SmurfForm extends Component {
   addSmurf = event => {
     event.preventDefault();
     Axios.post("http://localhost:3333/smurfs", this.state)
-      .then(res => console.log(res))
+      .then(res => this.props.history.push('/'))
       .catch(err => console.log(err));
     // add code to create the smurf using the api
 

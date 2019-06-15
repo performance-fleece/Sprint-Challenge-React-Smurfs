@@ -29,7 +29,7 @@ class App extends Component {
     axios.delete(`http://localhost:3333/smurfs/${id}`)
       .then(res => {
         this.setState({ smurfs: res.data })
-        this.props.history.push('/');
+        // this.props.history.push('/');
       })
       .catch(err => console.log(err))
   }
