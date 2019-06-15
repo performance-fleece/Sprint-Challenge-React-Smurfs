@@ -1,50 +1,59 @@
-import React, { Component } from 'react';
-import Axios from 'axios';
+import React, { Component } from "react";
+import Axios from "axios";
 
 class SmurfForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      age: '',
-      height: ''
+      smurf: this.props.activeItem || {
+        name: "",
+        age: "",
+        height: ""
+      }
     };
   }
 
-  addSmurf = event => {
-    event.preventDefault();
-    Axios.post("http://localhost:3333/smurfs", this.state)
-      .then(res => this.props.history.push('/'))
-      .catch(err => console.log(err));
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.addSmurf(e, this.state.smurf);
     // add code to create the smurf using the api
 
     this.setState({
-      name: '',
-      age: '',
-      height: ''
+      name: "",
+      age: "",
+      height: ""
     });
-  }
+    this.props.history.push('/');
+  };
 
   updateSmurf = () => {
-    const {age, name, height } = this.state;
+    const { age, name, height } = this.state;
     const { id } = this.props.location.state;
     const updateSmurf = { age, name, height };
     Axios.put(`http://localhost:3333/smurfs/${id}`, updateSmurf)
-    .then(res => {this.props.history.push("/");
-  })
-  .catch(err => {
-    console.log(err)
-  })
+      .then(res => {
+        this.props.history.push("/");
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    e.persist();
+    let value = e.target.value;
+    this.setState(prevState => ({
+      smurf: {
+        ...prevState.smurf,
+        [e.target.name]: value
+      }
+    }));
   };
 
   render() {
     return (
       <div className="SmurfForm">
-        <form onSubmit={this.addSmurf}>
+        <form onSubmit={this.handleSubmit}>
           <input
             onChange={this.handleInputChange}
             placeholder="name"

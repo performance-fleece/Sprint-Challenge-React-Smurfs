@@ -10,7 +10,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeItem: null,
       smurfs: [],
+      error: ""
     };
   }
 
@@ -24,6 +26,17 @@ class App extends Component {
       })
 
   }
+
+  addSmurf = (e, item) => {
+    e.preventDefault();
+    axios.post("http://localhost:3333/smurfs", item)
+    .then(res => {
+      this.setState({
+        smurfs: res.data
+      })
+    })
+    .catch(err => console.log(err));
+  };
 
   deleteSmurf = id => {
     axios.delete(`http://localhost:3333/smurfs/${id}`)
@@ -47,10 +60,10 @@ class App extends Component {
         </div>
         {/* <SmurfForm /> */}
         {/* <Smurfs smurfs={this.state.smurfs} /> */}
-        <Route exact path="/smurf-form" component={SmurfForm} />
+        <Route exact path="/smurf-form" render={props => <SmurfForm {...props} addSmurf={this.addSmurf} />} />
         <Route
-          exact path="/"
-          render={props => <Smurfs {...props} smurfs={this.state.smurfs} deleteSmurf={this.deleteSmurf} />}
+           exact path="/"
+          render={props => <Smurfs {...props} smurfs={this.state.smurfs} addSmurf={this.addSmurf} deleteSmurf={this.deleteSmurf} />}
         />
       </div>
     );
