@@ -1,3 +1,21 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* .nav-bar {
+  display: flex;
+  justify-content: center;
+  width: 600px;
+} */
+
+.Smurfs {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-bar a {
+  margin: 0 20px;
 }

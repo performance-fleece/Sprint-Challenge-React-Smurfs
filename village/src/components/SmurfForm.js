@@ -25,6 +25,18 @@ class SmurfForm extends Component {
     });
   }
 
+  updateSmurf = () => {
+    const {age, name, height } = this.state;
+    const { id } = this.props.location.state;
+    const updateSmurf = { age, name, height };
+    Axios.put(`http://localhost:3333/smurfs/${id}`, updateSmurf)
+    .then(res => {this.props.history.push("/");
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  };
+
   handleInputChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
