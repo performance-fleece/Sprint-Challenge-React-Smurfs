@@ -5,17 +5,19 @@ class SmurfForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      smurf: this.props.activeItem || {
-        name: "",
-        age: "",
-        height: ""
-      }
+     
+        name: this.props.location.state.name,
+        age: this.props.location.state.age,
+        height: this.props.location.state.height
+      
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.addSmurf(e, this.state.smurf);
+    const { age, name, height } = this.state;
+    const smurf = { age, name, height };
+    this.props.addSmurf(e, smurf);
     // add code to create the smurf using the api
 
     this.setState({
@@ -26,34 +28,30 @@ class SmurfForm extends Component {
     this.props.history.push('/');
   };
 
-  updateSmurf = () => {
+  handleUpdate = e => {
     const { age, name, height } = this.state;
     const { id } = this.props.location.state;
     const updateSmurf = { age, name, height };
-    Axios.put(`http://localhost:3333/smurfs/${id}`, updateSmurf)
-      .then(res => {
-        this.props.history.push("/");
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.props.updateSmurf(e, id, updateSmurf);
+    this.setState({
+      name: "",
+      age: "",
+      height: ""
+    });
+    this.props.history.push('/');
+    
   };
 
   handleInputChange = e => {
     e.persist();
     let value = e.target.value;
-    this.setState(prevState => ({
-      smurf: {
-        ...prevState.smurf,
-        [e.target.name]: value
-      }
-    }));
-  };
+    this.setState({ [e.target.name]: value });
+  }
 
   render() {
     return (
       <div className="SmurfForm">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.props.location.state.type === "update" ? this.handleUpdate : this.handleSubmit}>
           <input
             onChange={this.handleInputChange}
             placeholder="name"
@@ -72,7 +70,7 @@ class SmurfForm extends Component {
             value={this.state.height}
             name="height"
           />
-          <button type="submit">Add to the village</button>
+          <button type="submit">{this.props.location.state.type === "update" ? "Update Smurf" : "Add to the Village" }</button>
         </form>
       </div>
     );

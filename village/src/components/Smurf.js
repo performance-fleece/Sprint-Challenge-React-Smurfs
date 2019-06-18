@@ -8,7 +8,17 @@ const Smurf = props => {
       <strong>{props.height} tall</strong>
       <p>{props.age} smurf years old</p>
       <div className="smurf-buttons">
-        <Link to="/smurf-form">
+        <Link to={{
+          pathname: "/smurf-form",
+          state: {
+            id: props.id,
+            name: props.name,
+            age: props.age,
+            height: props.height,
+            type: "update"
+          }
+        }}
+        >
           <button>Update</button>
         </Link>
         <Link to="/">

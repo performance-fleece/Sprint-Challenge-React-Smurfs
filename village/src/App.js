@@ -27,6 +27,17 @@ class App extends Component {
 
   }
 
+  updateSmurf = (e, id, item) => {
+    e.preventDefault();
+    axios.put(`http://localhost:3333/smurfs/${id}`, item)
+    .then(res => {
+      this.setState({
+        smurfs: res.data
+      })
+    })
+    .catch(err=> console.log(err));
+  }
+
   addSmurf = (e, item) => {
     e.preventDefault();
     axios.post("http://localhost:3333/smurfs", item)
@@ -56,11 +67,19 @@ class App extends Component {
           <NavLink to="/">
             <button>Smurfs</button>
           </NavLink>
-          <NavLink to="/smurf-form"><button>Add Smurf</button></NavLink>
+          <NavLink to={{
+          pathname: "/smurf-form",
+          state: {
+            name: "",
+            age: "",
+            height: ""
+          }
+        }}
+        ><button>Add Smurf</button></NavLink>
         </div>
         {/* <SmurfForm /> */}
         {/* <Smurfs smurfs={this.state.smurfs} /> */}
-        <Route exact path="/smurf-form" render={props => <SmurfForm {...props} addSmurf={this.addSmurf} />} />
+        <Route exact path="/smurf-form" render={props => <SmurfForm {...props} addSmurf={this.addSmurf} updateSmurf={this.updateSmurf} />} />
         <Route
            exact path="/"
           render={props => <Smurfs {...props} smurfs={this.state.smurfs} addSmurf={this.addSmurf} deleteSmurf={this.deleteSmurf} />}
